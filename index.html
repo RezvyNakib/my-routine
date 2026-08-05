@@ -1,0 +1,275 @@
+<div id="app" style="max-width:720px;margin:0 auto;font-family:system-ui,-apple-system,sans-serif;color:#1a1a1a;">
+
+  <div style="text-align:center;margin-bottom:18px;">
+    <h1 style="font-size:22px;font-weight:700;margin:0 0 4px;color:#1a1a1a;">Weekly Routine Tracker</h1>
+    <p style="font-size:13px;color:#6b6b66;margin:0;">প্রতিদিন টিক দাও, স্ট্রিক ধরে রাখো</p>
+  </div>
+
+  <div id="summary" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px;"></div>
+
+  <div id="heatmap" style="margin-bottom:18px;"></div>
+
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+    <button id="prevWeek" style="border:1px solid #d6d3c7;background:#fff;color:#4a4a44;padding:6px 12px;border-radius:8px;font-size:13px;cursor:pointer;">← আগের সপ্তাহ</button>
+    <span id="weekLabel" style="font-size:13px;color:#6b6b66;font-weight:600;"></span>
+    <button id="nextWeek" style="border:1px solid #d6d3c7;background:#fff;color:#4a4a44;padding:6px 12px;border-radius:8px;font-size:13px;cursor:pointer;">পরের সপ্তাহ →</button>
+  </div>
+
+  <div id="days"></div>
+
+</div>
+
+<script>
+const TEMPLATE = [
+  { label: 'রবিবার', items: ['ঘুম সময়মতো (রাত ১১:৩০)', 'একাডেমিক পড়া', 'Phitron ২ ঘণ্টা', 'নাপ/রেস্ট'] },
+  { label: 'সোমবার', items: ['ঘুম সময়মতো (রাত ১১:৩০)', 'একাডেমিক পড়া', 'Phitron ২ ঘণ্টা', 'নাপ/রেস্ট'] },
+  { label: 'মঙ্গলবার', items: ['ঘুম সময়মতো (রাত ১১:৩০)', 'একাডেমিক পড়া', 'Phitron ২ ঘণ্টা', 'নাপ/রেস্ট'] },
+  { label: 'বুধবার', items: ['ঘুম সময়মতো (রাত ১১:৩০)', 'একাডেমিক পড়া', 'Phitron ২ ঘণ্টা', 'নাপ/রেস্ট'] },
+  { label: 'বৃহস্পতিবার', items: ['ঘুম সময়মতো (রাত ১২:০০)', 'একাডেমিক পড়া', 'Phitron ২ ঘণ্টা', 'নাপ/রেস্ট'] },
+  { label: 'শুক্রবার', items: ['ঘুম সময়মতো (রাত ১২:০০)', 'একাডেমিক পড়া', 'Phitron ২ ঘণ্টা', 'গার্লফ্রেন্ডের সাথে দেখা'] },
+  { label: 'শনিবার', items: ['ঘুম সময়মতো (রাত ১২:০০)', 'একাডেমিক পড়া', 'Phitron ২ ঘণ্টা', 'নাপ/রেস্ট'] },
+];
+
+const BN_MONTHS = ['জানু','ফেব্রু','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টে','অক্টো','নভে','ডিসে'];
+
+let entries = {};       // { 'YYYY-MM-DD': { checks: [bool...], extra: [{text, done}] } }
+let bestStreak = 0;
+let weekOffset = 0;     // 0 = current week
+
+function fmt(d) {
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+
+function startOfWeek(offset) {
+  const now = new Date();
+  const day = now.getDay(); // 0 = Sunday
+  const sunday = new Date(now);
+  sunday.setDate(now.getDate() - day + offset * 7);
+  sunday.setHours(0,0,0,0);
+  return sunday;
+}
+
+function getEntry(dateKey) {
+  return entries[dateKey] || { checks: [false,false,false,false], extra: [] };
+}
+
+async function loadState() {
+  try {
+    const res = await window.storage.get('routine-entries', false);
+    entries = res ? JSON.parse(res.value) : {};
+  } catch (e) { entries = {}; }
+  try {
+    const res2 = await window.storage.get('routine-best-streak', false);
+    bestStreak = res2 ? JSON.parse(res2.value) : 0;
+  } catch (e) { bestStreak = 0; }
+  render();
+}
+
+async function saveEntries() {
+  try { await window.storage.set('routine-entries', JSON.stringify(entries), false); }
+  catch (e) { console.error('save failed', e); }
+}
+
+async function saveBestStreak() {
+  try { await window.storage.set('routine-best-streak', JSON.stringify(bestStreak), false); }
+  catch (e) { console.error('save failed', e); }
+}
+
+function isDayFull(dateKey) {
+  const e = getEntry(dateKey);
+  const total = e.checks.length + e.extra.length;
+  if (total === 0) return false;
+  const done = e.checks.filter(Boolean).length + e.extra.filter(x => x.done).length;
+  return done === total;
+}
+
+function computeStreak() {
+  let streak = 0;
+  let cursor = new Date();
+  cursor.setHours(0,0,0,0);
+  const todayKey = fmt(cursor);
+  if (!isDayFull(todayKey)) {
+    cursor.setDate(cursor.getDate() - 1);
+  }
+  while (true) {
+    const key = fmt(cursor);
+    if (isDayFull(key)) {
+      streak++;
+      cursor.setDate(cursor.getDate() - 1);
+    } else break;
+  }
+  return streak;
+}
+
+function toggleCheck(dateKey, idx) {
+  if (!entries[dateKey]) entries[dateKey] = { checks: [false,false,false,false], extra: [] };
+  entries[dateKey].checks[idx] = !entries[dateKey].checks[idx];
+  afterChange();
+}
+
+function toggleExtra(dateKey, idx) {
+  entries[dateKey].extra[idx].done = !entries[dateKey].extra[idx].done;
+  afterChange();
+}
+
+function addExtra(dateKey, text) {
+  if (!text.trim()) return;
+  if (!entries[dateKey]) entries[dateKey] = { checks: [false,false,false,false], extra: [] };
+  entries[dateKey].extra.push({ text: text.trim(), done: false });
+  afterChange();
+}
+
+function removeExtra(dateKey, idx) {
+  entries[dateKey].extra.splice(idx, 1);
+  afterChange();
+}
+
+function afterChange() {
+  const streak = computeStreak();
+  if (streak > bestStreak) { bestStreak = streak; saveBestStreak(); }
+  saveEntries();
+  render();
+}
+
+function render() {
+  const weekStart = startOfWeek(weekOffset);
+  const daysEl = document.getElementById('days');
+  const summaryEl = document.getElementById('summary');
+  const heatmapEl = document.getElementById('heatmap');
+  const weekLabelEl = document.getElementById('weekLabel');
+  daysEl.innerHTML = '';
+
+  const weekDates = [];
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(weekStart);
+    d.setDate(weekStart.getDate() + i);
+    weekDates.push(d);
+  }
+  weekLabelEl.textContent = `${weekDates[0].getDate()} ${BN_MONTHS[weekDates[0].getMonth()]} – ${weekDates[6].getDate()} ${BN_MONTHS[weekDates[6].getMonth()]}`;
+
+  let totalDone = 0, totalItems = 0, fullDays = 0;
+  const todayKey = fmt(new Date());
+
+  weekDates.forEach((d, i) => {
+    const dateKey = fmt(d);
+    const entry = getEntry(dateKey);
+    const tpl = TEMPLATE[i];
+    const isToday = dateKey === todayKey;
+    const isFuture = d > new Date();
+
+    let doneCount = 0;
+    const checkboxRows = tpl.items.map((item, idx) => {
+      const checked = !!entry.checks[idx];
+      if (checked) doneCount++;
+      totalItems++;
+      if (checked) totalDone++;
+      return `<label style="display:flex;align-items:center;gap:8px;padding:5px 0;font-size:14px;cursor:pointer;color:${checked ? '#8a8a84' : '#1a1a1a'};text-decoration:${checked ? 'line-through' : 'none'};">
+        <input type="checkbox" ${checked ? 'checked' : ''} onchange="toggleCheck('${dateKey}',${idx})" style="width:16px;height:16px;accent-color:#3b6d11;flex-shrink:0;" />
+        ${item}
+      </label>`;
+    }).join('');
+
+    const extraRows = entry.extra.map((ex, idx) => {
+      if (ex.done) doneCount++;
+      totalItems++;
+      if (ex.done) totalDone++;
+      return `<label style="display:flex;align-items:center;gap:8px;padding:5px 0;font-size:14px;cursor:pointer;color:${ex.done ? '#8a8a84' : '#1a1a1a'};text-decoration:${ex.done ? 'line-through' : 'none'};">
+        <input type="checkbox" ${ex.done ? 'checked' : ''} onchange="toggleExtra('${dateKey}',${idx})" style="width:16px;height:16px;accent-color:#993c1d;flex-shrink:0;" />
+        <span style="flex:1;">${ex.text}</span>
+        <span onclick="removeExtra('${dateKey}',${idx})" style="color:#b4b2a9;cursor:pointer;font-size:16px;line-height:1;">×</span>
+      </label>`;
+    }).join('');
+
+    doneCount = 0;
+    totalDone -= 0; // recompute cleanly below
+    const totalForDay = tpl.items.length + entry.extra.length;
+    const doneForDay = entry.checks.filter(Boolean).length + entry.extra.filter(x=>x.done).length;
+    const allDone = totalForDay > 0 && doneForDay === totalForDay;
+    if (allDone) fullDays++;
+
+    const card = document.createElement('div');
+    card.style.cssText = `background:#fff;border:1px solid ${allDone ? '#639922' : (isToday ? '#378add' : '#e5e3d8')};border-radius:12px;padding:12px 16px;margin-bottom:10px;opacity:${isFuture ? '0.6' : '1'};`;
+    card.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+        <span style="font-weight:600;font-size:15px;">${tpl.label} <span style="font-weight:400;color:#8a8a84;font-size:12px;">${d.getDate()} ${BN_MONTHS[d.getMonth()]}</span>${isToday ? ' <span style="color:#378add;font-size:11px;font-weight:600;">• আজ</span>' : ''}</span>
+        <span style="font-size:12px;color:${allDone ? '#3b6d11' : '#8a8a84'};font-weight:600;">${doneForDay}/${totalForDay}${allDone ? ' ✓' : ''}</span>
+      </div>
+      ${checkboxRows}
+      ${extraRows}
+      <div style="display:flex;gap:6px;margin-top:6px;">
+        <input type="text" placeholder="নতুন টাস্ক যোগ করো..." id="input-${dateKey}" style="flex:1;font-size:13px;padding:5px 8px;border:1px solid #e5e3d8;border-radius:6px;" />
+        <button onclick="handleAdd('${dateKey}')" style="font-size:13px;padding:5px 10px;border:1px solid #d6d3c7;background:#f7f6ef;border-radius:6px;cursor:pointer;">+</button>
+      </div>
+    `;
+    daysEl.appendChild(card);
+  });
+
+  // recompute totals properly (avoid double count bug from inline calc above)
+  totalDone = 0; totalItems = 0;
+  weekDates.forEach((d,i) => {
+    const entry = getEntry(fmt(d));
+    const tpl = TEMPLATE[i];
+    totalItems += tpl.items.length + entry.extra.length;
+    totalDone += entry.checks.filter(Boolean).length + entry.extra.filter(x=>x.done).length;
+  });
+
+  const pct = totalItems ? Math.round((totalDone / totalItems) * 100) : 0;
+  const streak = computeStreak();
+
+  summaryEl.innerHTML = `
+    <div style="background:#f7f6ef;border-radius:10px;padding:10px;text-align:center;">
+      <div style="font-size:19px;font-weight:700;">${pct}%</div>
+      <div style="font-size:10px;color:#6b6b66;">সপ্তাহের অগ্রগতি</div>
+    </div>
+    <div style="background:#f7f6ef;border-radius:10px;padding:10px;text-align:center;">
+      <div style="font-size:19px;font-weight:700;">${fullDays}/7</div>
+      <div style="font-size:10px;color:#6b6b66;">ফুল দিন</div>
+    </div>
+    <div style="background:#fdf0e6;border-radius:10px;padding:10px;text-align:center;">
+      <div style="font-size:19px;font-weight:700;color:#993c1d;">🔥${streak}</div>
+      <div style="font-size:10px;color:#993c1d;">চলমান স্ট্রিক</div>
+    </div>
+    <div style="background:#f7f6ef;border-radius:10px;padding:10px;text-align:center;">
+      <div style="font-size:19px;font-weight:700;">${bestStreak}</div>
+      <div style="font-size:10px;color:#6b6b66;">বেস্ট স্ট্রিক</div>
+    </div>
+  `;
+
+  // 21-day heatmap
+  const cells = [];
+  for (let i = 20; i >= 0; i--) {
+    const d = new Date();
+    d.setDate(d.getDate() - i);
+    const key = fmt(d);
+    const e = getEntry(key);
+    const total = TEMPLATE[d.getDay()].items.length + e.extra.length;
+    const done = e.checks.filter(Boolean).length + e.extra.filter(x=>x.done).length;
+    const ratio = total ? done/total : 0;
+    let bg = '#eceae0';
+    if (ratio >= 1) bg = '#639922';
+    else if (ratio >= 0.5) bg = '#c0dd97';
+    else if (ratio > 0) bg = '#eaf3de';
+    cells.push(`<div title="${key}: ${done}/${total}" style="width:16px;height:16px;border-radius:4px;background:${bg};"></div>`);
+  }
+  heatmapEl.innerHTML = `
+    <div style="font-size:11px;color:#6b6b66;margin-bottom:6px;">গত ২১ দিন</div>
+    <div style="display:flex;gap:3px;flex-wrap:wrap;">${cells.join('')}</div>
+  `;
+}
+
+function handleAdd(dateKey) {
+  const input = document.getElementById('input-' + dateKey);
+  addExtra(dateKey, input.value);
+  input.value = '';
+}
+
+document.getElementById('prevWeek').addEventListener('click', () => { weekOffset--; render(); });
+document.getElementById('nextWeek').addEventListener('click', () => { weekOffset++; render(); });
+
+window.toggleCheck = toggleCheck;
+window.toggleExtra = toggleExtra;
+window.removeExtra = removeExtra;
+window.handleAdd = handleAdd;
+
+loadState();
+</script> 
