@@ -53,26 +53,44 @@ function getEntry(dateKey) {
   return entries[dateKey] || { checks: [false,false,false,false], extra: [] };
 }
 
+// Works both inside Claude.ai (window.storage) and as a standalone downloaded
+// file opened directly in a browser (falls back to localStorage there).
+const store = {
+  async get(key) {
+    if (typeof window.storage !== 'undefined' && window.storage) {
+      try {
+        const res = await window.storage.get(key, false);
+        return res ? res.value : null;
+      } catch (e) { /* key missing or API unavailable, fall through */ }
+    }
+    try { return localStorage.getItem(key); } catch (e) { return null; }
+  },
+  async set(key, value) {
+    let savedViaStorageApi = false;
+    if (typeof window.storage !== 'undefined' && window.storage) {
+      try { await window.storage.set(key, value, false); savedViaStorageApi = true; }
+      catch (e) { /* fall through to localStorage */ }
+    }
+    if (!savedViaStorageApi) {
+      try { localStorage.setItem(key, value); } catch (e) { console.error('save failed', e); }
+    }
+  }
+};
+
 async function loadState() {
-  try {
-    const res = await window.storage.get('routine-entries', false);
-    entries = res ? JSON.parse(res.value) : {};
-  } catch (e) { entries = {}; }
-  try {
-    const res2 = await window.storage.get('routine-best-streak', false);
-    bestStreak = res2 ? JSON.parse(res2.value) : 0;
-  } catch (e) { bestStreak = 0; }
+  const raw = await store.get('routine-entries');
+  entries = raw ? JSON.parse(raw) : {};
+  const rawStreak = await store.get('routine-best-streak');
+  bestStreak = rawStreak ? JSON.parse(rawStreak) : 0;
   render();
 }
 
 async function saveEntries() {
-  try { await window.storage.set('routine-entries', JSON.stringify(entries), false); }
-  catch (e) { console.error('save failed', e); }
+  await store.set('routine-entries', JSON.stringify(entries));
 }
 
 async function saveBestStreak() {
-  try { await window.storage.set('routine-best-streak', JSON.stringify(bestStreak), false); }
-  catch (e) { console.error('save failed', e); }
+  await store.set('routine-best-streak', JSON.stringify(bestStreak));
 }
 
 function isDayFull(dateKey) {
@@ -272,4 +290,4 @@ window.removeExtra = removeExtra;
 window.handleAdd = handleAdd;
 
 loadState();
-</script> 
+</script>
