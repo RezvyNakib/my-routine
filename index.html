@@ -1,293 +1,264 @@
-<div id="app" style="max-width:720px;margin:0 auto;font-family:system-ui,-apple-system,sans-serif;color:#1a1a1a;">
+<!doctype html>
+<html lang="bn" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>My Routine — প্রতিদিনের ছোট জয়</title>
+  <meta name="description" content="একটা শান্ত, উৎসাহদায়ী ডেইলি রুটিন ট্র্যাকার — ক্লাস, পড়া, স্ট্রিক আর ছোট ছোট জয়ের হিসাব।" />
+  <meta name="theme-color" content="#6d5ae6" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%236d5ae6'/%3E%3Cpath d='M50 18l8.4 20.2L80 46l-21.6 7.8L50 74l-8.4-20.2L20 46l21.6-7.8z' fill='%23ffe6c7'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/styles.css?v=3" />
+</head>
+<body>
+  <div class="shell">
 
-  <div style="text-align:center;margin-bottom:18px;">
-    <h1 style="font-size:22px;font-weight:700;margin:0 0 4px;color:#1a1a1a;">Weekly Routine Tracker</h1>
-    <p style="font-size:13px;color:#6b6b66;margin:0;">প্রতিদিন টিক দাও, স্ট্রিক ধরে রাখো</p>
+    <!-- ============================ HERO ============================ -->
+    <header class="hero">
+      <div class="hero__orb hero__orb--1" aria-hidden="true"></div>
+      <div class="hero__orb hero__orb--2" aria-hidden="true"></div>
+
+      <div class="topbar">
+        <a class="brand" href="#">
+          <span class="brand__mark" aria-hidden="true">✧</span>
+          <span>My Routine</span>
+        </a>
+        <div class="topbar__actions">
+          <button class="icon-btn" id="themeBtn" type="button" aria-label="থিম বদলাও" title="থিম বদলাও">🌙</button>
+          <button class="icon-btn" id="settingsBtn" type="button" aria-label="সেটিংস" title="সেটিংস">⚙️</button>
+        </div>
+      </div>
+
+      <p class="hero__hello" id="greeting">শুভ সকাল, Nakib</p>
+      <h1 class="hero__title">তুমি চেষ্টা করছো — <em>এটাই তোমার সবচেয়ে বড় জয়।</em></h1>
+      <p class="hero__sub" id="heroSub">আজকের ছোট ছোট ধাপগুলোই তোমাকে গড়ছে।</p>
+
+      <div class="level">
+        <div class="level__ring" id="levelRing" style="--p: 0">
+          <span id="levelNum">লেভেল ১</span>
+        </div>
+        <div class="level__body">
+          <div class="level__row">
+            <span class="level__name" id="levelName">শুরু</span>
+            <span class="level__xp" id="xpText">০ / ১০০ XP</span>
+          </div>
+          <div class="xp"><div class="xp__fill" id="xpFill"></div></div>
+          <p class="level__hint" id="levelHint">প্রথম কাজটা করলেই যাত্রা শুরু।</p>
+        </div>
+      </div>
+    </header>
+
+    <!-- ============================ TABS ============================ -->
+    <nav class="tabs" role="tablist" aria-label="ভিউ">
+      <button class="tab is-active" type="button" role="tab" aria-selected="true" aria-controls="panel-today" data-tab="today">আজ</button>
+      <button class="tab" type="button" role="tab" aria-selected="false" aria-controls="panel-week" data-tab="week">সপ্তাহ</button>
+      <button class="tab" type="button" role="tab" aria-selected="false" aria-controls="panel-journey" data-tab="journey">যাত্রা</button>
+    </nav>
+
+    <main>
+      <!-- ============================ TODAY ============================ -->
+      <section class="panel is-active" id="panel-today" role="tabpanel" aria-label="আজ">
+
+        <article class="card appreciation" id="appreciationCard">
+          <div class="appreciation__top">
+            <span class="pill" id="progressPill">০% সম্পন্ন</span>
+            <span class="pill pill--ghost" id="todayDate">মঙ্গলবার, ২৭ অক্টোবর</span>
+          </div>
+          <h2 id="appreciationTitle">আজ হালকা করে শুরু করো</h2>
+          <p class="appreciation__text" id="appreciationText"></p>
+          <p class="appreciation__streak" id="streakLine" hidden></p>
+          <div class="affirm">
+            <span class="affirm__spark" aria-hidden="true">✦</span>
+            <span class="affirm__text" id="affirmText">আমি প্রতিদিন নিজের চেয়ে একটু ভালো হচ্ছি।</span>
+          </div>
+        </article>
+
+        <div class="today-grid">
+          <!-- left column -->
+          <div>
+            <article class="card">
+              <header class="card__head">
+                <div>
+                  <h2>আজকের রুটিন</h2>
+                  <p id="taskSub">০ / ০ সম্পন্ন</p>
+                </div>
+                <div class="ring" id="todayRing" style="--p: 0" aria-hidden="true"><span id="todayRingPct">০%</span></div>
+              </header>
+
+              <div class="task-list" id="taskList"></div>
+
+              <form class="add-row" id="addTaskForm" autocomplete="off">
+                <input id="addTaskInput" type="text" maxlength="80" placeholder="আজকের জন্য নতুন কাজ যোগ করো..." aria-label="নতুন কাজ" />
+                <button type="submit" aria-label="যোগ করো">+</button>
+              </form>
+
+              <div class="win">
+                <label for="winInput">আজকের ছোট জয়টা লিখে রাখো</label>
+                <p class="win__hint">বড় কিছু না হলেও চলবে — যেটুকু পারেছো, সেটাই জয়।</p>
+                <textarea id="winInput" maxlength="240" rows="2" placeholder="যেমন: ক্লাস শেষে ক্লান্ত ছিলাম, তবু ১ ঘণ্টা পড়েছি।"></textarea>
+                <div class="win__foot">
+                  <span class="win__status" id="winStatus"></span>
+                  <button class="btn btn--primary" id="saveWin" type="button">সংরক্ষণ করো</button>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <!-- right column -->
+          <aside class="side">
+            <article class="card">
+              <header class="card__head">
+                <div>
+                  <h2>আজকের ক্লাস</h2>
+                  <p id="classSub">টিক দিলে উপস্থিতি গণনা হবে</p>
+                </div>
+                <span class="pill pill--ghost" id="classCount">০টি</span>
+              </header>
+              <div id="nowStrip"></div>
+              <div class="class-list" id="classList"></div>
+            </article>
+
+            <article class="card quote-card">
+              <div class="quote-card__mark" aria-hidden="true">“</div>
+              <p id="quoteText"></p>
+              <cite id="quoteAuthor"></cite>
+            </article>
+          </aside>
+        </div>
+      </section>
+
+      <!-- ============================ WEEK ============================ -->
+      <section class="panel" id="panel-week" role="tabpanel" aria-label="সপ্তাহ" hidden>
+        <article class="card">
+          <div class="week-nav">
+            <button class="nav-btn" id="weekPrev" type="button" aria-label="আগের সপ্তাহ">←</button>
+            <div class="week-nav__label">
+              <strong id="weekLabel">—</strong>
+              <span id="weekRange">—</span>
+            </div>
+            <button class="nav-btn" id="weekNext" type="button" aria-label="পরের সপ্তাহ">→</button>
+          </div>
+
+          <div class="week-summary" id="weekSummary"></div>
+          <div class="week-days" id="weekDays"></div>
+
+          <div style="text-align:center;margin-top:14px;">
+            <button class="btn" id="weekToday" type="button" hidden>এই সপ্তাহে ফিরে যাও</button>
+          </div>
+        </article>
+      </section>
+
+      <!-- ============================ JOURNEY ============================ -->
+      <section class="panel" id="panel-journey" role="tabpanel" aria-label="যাত্রা" hidden>
+        <div class="stats-grid" id="statsGrid"></div>
+
+        <article class="card">
+          <header class="card__head">
+            <div>
+              <h2>শেষ ৯০ দিনের ছাপ</h2>
+              <p>প্রতিটি বর্গ একদিন — রঙ গাঢ় হলে বেশি কাজ শেষ।</p>
+            </div>
+          </header>
+          <div class="heatmap-wrap">
+            <div class="heatmap" id="heatmap"></div>
+          </div>
+          <div class="heat-legend">
+            <span id="heatRange"></span>
+            <span class="heat-legend__scale">
+              <span>কম</span>
+              <span class="hm-cell"></span>
+              <span class="hm-cell l1"></span>
+              <span class="hm-cell l2"></span>
+              <span class="hm-cell l3"></span>
+              <span class="hm-cell l4"></span>
+              <span>বেশি</span>
+            </span>
+          </div>
+        </article>
+
+        <article class="card">
+          <header class="card__head">
+            <div>
+              <h2>জমানো তারা ✨</h2>
+              <p>প্রতিটি নিখুঁত দিন একটা তারা।</p>
+            </div>
+            <span class="pill pill--mint" id="starCount">০ তারা</span>
+          </header>
+          <div class="star-jar" id="starJar"></div>
+        </article>
+
+        <article class="card">
+          <header class="card__head">
+            <div>
+              <h2>অ্যাচিভমেন্ট</h2>
+              <p>ছোট ছোট মাইলস্টোন — সবগুলো তোমারই।</p>
+            </div>
+          </header>
+          <div class="achievements" id="achievementsList"></div>
+        </article>
+
+        <article class="card">
+          <header class="card__head">
+            <div>
+              <h2>তোমার জয়ের ডায়েরি</h2>
+              <p>যেগুলো তুমি নিজে লিখে রেখেছো।</p>
+            </div>
+          </header>
+          <div class="win-list" id="winsList"></div>
+        </article>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p><strong>My Routine</strong> — তৈরি হয়েছে একজনের জন্য, যিনি প্রতিদিন চেষ্টা করে যাচ্ছেন। <span class="heart">♥</span></p>
+      <p>সব ডেটা শুধু তোমার ব্রাউজারে থাকে · <span id="footerYear"></span></p>
+    </footer>
   </div>
 
-  <div id="summary" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px;"></div>
-
-  <div id="heatmap" style="margin-bottom:18px;"></div>
-
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-    <button id="prevWeek" style="border:1px solid #d6d3c7;background:#fff;color:#4a4a44;padding:6px 12px;border-radius:8px;font-size:13px;cursor:pointer;">← আগের সপ্তাহ</button>
-    <span id="weekLabel" style="font-size:13px;color:#6b6b66;font-weight:600;"></span>
-    <button id="nextWeek" style="border:1px solid #d6d3c7;background:#fff;color:#4a4a44;padding:6px 12px;border-radius:8px;font-size:13px;cursor:pointer;">পরের সপ্তাহ →</button>
-  </div>
-
-  <div id="days"></div>
-
-</div>
-
-<script>
-const TEMPLATE = [
-  { label: 'রবিবার', items: ['ঘুম সময়মতো (রাত ১১:৩০)', 'একাডেমিক পড়া', 'Phitron ২ ঘণ্টা', 'নাপ/রেস্ট'] },
-  { label: 'সোমবার', items: ['ঘুম সময়মতো (রাত ১১:৩০)', 'একাডেমিক পড়া', 'Phitron ২ ঘণ্টা', 'নাপ/রেস্ট'] },
-  { label: 'মঙ্গলবার', items: ['ঘুম সময়মতো (রাত ১১:৩০)', 'একাডেমিক পড়া', 'Phitron ২ ঘণ্টা', 'নাপ/রেস্ট'] },
-  { label: 'বুধবার', items: ['ঘুম সময়মতো (রাত ১১:৩০)', 'একাডেমিক পড়া', 'Phitron ২ ঘণ্টা', 'নাপ/রেস্ট'] },
-  { label: 'বৃহস্পতিবার', items: ['ঘুম সময়মতো (রাত ১২:০০)', 'একাডেমিক পড়া', 'Phitron ২ ঘণ্টা', 'নাপ/রেস্ট'] },
-  { label: 'শুক্রবার', items: ['ঘুম সময়মতো (রাত ১২:০০)', 'একাডেমিক পড়া', 'Phitron ২ ঘণ্টা', 'গার্লফ্রেন্ডের সাথে দেখা'] },
-  { label: 'শনিবার', items: ['ঘুম সময়মতো (রাত ১২:০০)', 'একাডেমিক পড়া', 'Phitron ২ ঘণ্টা', 'নাপ/রেস্ট'] },
-];
-
-const BN_MONTHS = ['জানু','ফেব্রু','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টে','অক্টো','নভে','ডিসে'];
-
-let entries = {};       // { 'YYYY-MM-DD': { checks: [bool...], extra: [{text, done}] } }
-let bestStreak = 0;
-let weekOffset = 0;     // 0 = current week
-
-function fmt(d) {
-  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
-}
-
-function startOfWeek(offset) {
-  const now = new Date();
-  const day = now.getDay(); // 0 = Sunday
-  const sunday = new Date(now);
-  sunday.setDate(now.getDate() - day + offset * 7);
-  sunday.setHours(0,0,0,0);
-  return sunday;
-}
-
-function getEntry(dateKey) {
-  return entries[dateKey] || { checks: [false,false,false,false], extra: [] };
-}
-
-// Works both inside Claude.ai (window.storage) and as a standalone downloaded
-// file opened directly in a browser (falls back to localStorage there).
-const store = {
-  async get(key) {
-    if (typeof window.storage !== 'undefined' && window.storage) {
-      try {
-        const res = await window.storage.get(key, false);
-        return res ? res.value : null;
-      } catch (e) { /* key missing or API unavailable, fall through */ }
-    }
-    try { return localStorage.getItem(key); } catch (e) { return null; }
-  },
-  async set(key, value) {
-    let savedViaStorageApi = false;
-    if (typeof window.storage !== 'undefined' && window.storage) {
-      try { await window.storage.set(key, value, false); savedViaStorageApi = true; }
-      catch (e) { /* fall through to localStorage */ }
-    }
-    if (!savedViaStorageApi) {
-      try { localStorage.setItem(key, value); } catch (e) { console.error('save failed', e); }
-    }
-  }
-};
-
-async function loadState() {
-  const raw = await store.get('routine-entries');
-  entries = raw ? JSON.parse(raw) : {};
-  const rawStreak = await store.get('routine-best-streak');
-  bestStreak = rawStreak ? JSON.parse(rawStreak) : 0;
-  render();
-}
-
-async function saveEntries() {
-  await store.set('routine-entries', JSON.stringify(entries));
-}
-
-async function saveBestStreak() {
-  await store.set('routine-best-streak', JSON.stringify(bestStreak));
-}
-
-function isDayFull(dateKey) {
-  const e = getEntry(dateKey);
-  const total = e.checks.length + e.extra.length;
-  if (total === 0) return false;
-  const done = e.checks.filter(Boolean).length + e.extra.filter(x => x.done).length;
-  return done === total;
-}
-
-function computeStreak() {
-  let streak = 0;
-  let cursor = new Date();
-  cursor.setHours(0,0,0,0);
-  const todayKey = fmt(cursor);
-  if (!isDayFull(todayKey)) {
-    cursor.setDate(cursor.getDate() - 1);
-  }
-  while (true) {
-    const key = fmt(cursor);
-    if (isDayFull(key)) {
-      streak++;
-      cursor.setDate(cursor.getDate() - 1);
-    } else break;
-  }
-  return streak;
-}
-
-function toggleCheck(dateKey, idx) {
-  if (!entries[dateKey]) entries[dateKey] = { checks: [false,false,false,false], extra: [] };
-  entries[dateKey].checks[idx] = !entries[dateKey].checks[idx];
-  afterChange();
-}
-
-function toggleExtra(dateKey, idx) {
-  entries[dateKey].extra[idx].done = !entries[dateKey].extra[idx].done;
-  afterChange();
-}
-
-function addExtra(dateKey, text) {
-  if (!text.trim()) return;
-  if (!entries[dateKey]) entries[dateKey] = { checks: [false,false,false,false], extra: [] };
-  entries[dateKey].extra.push({ text: text.trim(), done: false });
-  afterChange();
-}
-
-function removeExtra(dateKey, idx) {
-  entries[dateKey].extra.splice(idx, 1);
-  afterChange();
-}
-
-function afterChange() {
-  const streak = computeStreak();
-  if (streak > bestStreak) { bestStreak = streak; saveBestStreak(); }
-  saveEntries();
-  render();
-}
-
-function render() {
-  const weekStart = startOfWeek(weekOffset);
-  const daysEl = document.getElementById('days');
-  const summaryEl = document.getElementById('summary');
-  const heatmapEl = document.getElementById('heatmap');
-  const weekLabelEl = document.getElementById('weekLabel');
-  daysEl.innerHTML = '';
-
-  const weekDates = [];
-  for (let i = 0; i < 7; i++) {
-    const d = new Date(weekStart);
-    d.setDate(weekStart.getDate() + i);
-    weekDates.push(d);
-  }
-  weekLabelEl.textContent = `${weekDates[0].getDate()} ${BN_MONTHS[weekDates[0].getMonth()]} – ${weekDates[6].getDate()} ${BN_MONTHS[weekDates[6].getMonth()]}`;
-
-  let totalDone = 0, totalItems = 0, fullDays = 0;
-  const todayKey = fmt(new Date());
-
-  weekDates.forEach((d, i) => {
-    const dateKey = fmt(d);
-    const entry = getEntry(dateKey);
-    const tpl = TEMPLATE[i];
-    const isToday = dateKey === todayKey;
-    const isFuture = d > new Date();
-
-    let doneCount = 0;
-    const checkboxRows = tpl.items.map((item, idx) => {
-      const checked = !!entry.checks[idx];
-      if (checked) doneCount++;
-      totalItems++;
-      if (checked) totalDone++;
-      return `<label style="display:flex;align-items:center;gap:8px;padding:5px 0;font-size:14px;cursor:pointer;color:${checked ? '#8a8a84' : '#1a1a1a'};text-decoration:${checked ? 'line-through' : 'none'};">
-        <input type="checkbox" ${checked ? 'checked' : ''} onchange="toggleCheck('${dateKey}',${idx})" style="width:16px;height:16px;accent-color:#3b6d11;flex-shrink:0;" />
-        ${item}
-      </label>`;
-    }).join('');
-
-    const extraRows = entry.extra.map((ex, idx) => {
-      if (ex.done) doneCount++;
-      totalItems++;
-      if (ex.done) totalDone++;
-      return `<label style="display:flex;align-items:center;gap:8px;padding:5px 0;font-size:14px;cursor:pointer;color:${ex.done ? '#8a8a84' : '#1a1a1a'};text-decoration:${ex.done ? 'line-through' : 'none'};">
-        <input type="checkbox" ${ex.done ? 'checked' : ''} onchange="toggleExtra('${dateKey}',${idx})" style="width:16px;height:16px;accent-color:#993c1d;flex-shrink:0;" />
-        <span style="flex:1;">${ex.text}</span>
-        <span onclick="removeExtra('${dateKey}',${idx})" style="color:#b4b2a9;cursor:pointer;font-size:16px;line-height:1;">×</span>
-      </label>`;
-    }).join('');
-
-    doneCount = 0;
-    totalDone -= 0; // recompute cleanly below
-    const totalForDay = tpl.items.length + entry.extra.length;
-    const doneForDay = entry.checks.filter(Boolean).length + entry.extra.filter(x=>x.done).length;
-    const allDone = totalForDay > 0 && doneForDay === totalForDay;
-    if (allDone) fullDays++;
-
-    const card = document.createElement('div');
-    card.style.cssText = `background:#fff;border:1px solid ${allDone ? '#639922' : (isToday ? '#378add' : '#e5e3d8')};border-radius:12px;padding:12px 16px;margin-bottom:10px;opacity:${isFuture ? '0.6' : '1'};`;
-    card.innerHTML = `
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
-        <span style="font-weight:600;font-size:15px;">${tpl.label} <span style="font-weight:400;color:#8a8a84;font-size:12px;">${d.getDate()} ${BN_MONTHS[d.getMonth()]}</span>${isToday ? ' <span style="color:#378add;font-size:11px;font-weight:600;">• আজ</span>' : ''}</span>
-        <span style="font-size:12px;color:${allDone ? '#3b6d11' : '#8a8a84'};font-weight:600;">${doneForDay}/${totalForDay}${allDone ? ' ✓' : ''}</span>
-      </div>
-      ${checkboxRows}
-      ${extraRows}
-      <div style="display:flex;gap:6px;margin-top:6px;">
-        <input type="text" placeholder="নতুন টাস্ক যোগ করো..." id="input-${dateKey}" style="flex:1;font-size:13px;padding:5px 8px;border:1px solid #e5e3d8;border-radius:6px;" />
-        <button onclick="handleAdd('${dateKey}')" style="font-size:13px;padding:5px 10px;border:1px solid #d6d3c7;background:#f7f6ef;border-radius:6px;cursor:pointer;">+</button>
-      </div>
-    `;
-    daysEl.appendChild(card);
-  });
-
-  // recompute totals properly (avoid double count bug from inline calc above)
-  totalDone = 0; totalItems = 0;
-  weekDates.forEach((d,i) => {
-    const entry = getEntry(fmt(d));
-    const tpl = TEMPLATE[i];
-    totalItems += tpl.items.length + entry.extra.length;
-    totalDone += entry.checks.filter(Boolean).length + entry.extra.filter(x=>x.done).length;
-  });
-
-  const pct = totalItems ? Math.round((totalDone / totalItems) * 100) : 0;
-  const streak = computeStreak();
-
-  summaryEl.innerHTML = `
-    <div style="background:#f7f6ef;border-radius:10px;padding:10px;text-align:center;">
-      <div style="font-size:19px;font-weight:700;">${pct}%</div>
-      <div style="font-size:10px;color:#6b6b66;">সপ্তাহের অগ্রগতি</div>
+  <!-- ============================ SETTINGS ============================ -->
+  <dialog class="sheet" id="settingsDialog">
+    <div class="sheet__head">
+      <h2>সেটিংস</h2>
+      <button class="icon-btn" id="closeSettings" type="button" aria-label="বন্ধ করো">✕</button>
     </div>
-    <div style="background:#f7f6ef;border-radius:10px;padding:10px;text-align:center;">
-      <div style="font-size:19px;font-weight:700;">${fullDays}/7</div>
-      <div style="font-size:10px;color:#6b6b66;">ফুল দিন</div>
+    <div class="sheet__body">
+      <section>
+        <h3>থিম</h3>
+        <div class="seg" id="themeSeg">
+          <button type="button" data-theme-choice="auto">অটো</button>
+          <button type="button" data-theme-choice="light">লাইট</button>
+          <button type="button" data-theme-choice="dark">ডার্ক</button>
+        </div>
+      </section>
+
+      <section>
+        <h3>রুটিন সাজাও</h3>
+        <div class="daychips" id="routineDayChips"></div>
+        <div class="editor" id="routineEditor"></div>
+        <form class="add-row" id="routineAddForm" autocomplete="off">
+          <input id="routineAddInput" type="text" maxlength="70" placeholder="নতুন রুটিন আইটেম..." aria-label="নতুন রুটিন আইটেম" />
+          <button type="submit">যোগ করো</button>
+        </form>
+      </section>
+
+      <section>
+        <h3>ডেটা</h3>
+        <div class="btn-row">
+          <button class="btn" id="exportBtn" type="button">ব্যাকআপ নামাও</button>
+          <button class="btn" id="importBtn" type="button">ব্যাকআপ লোড করো</button>
+          <input type="file" id="importInput" accept="application/json,.json" hidden />
+          <button class="btn btn--danger" id="resetBtn" type="button">সব মুছে ফেলো</button>
+        </div>
+        <p class="small muted">সব ডেটা তোমার ব্রাউজারের localStorage-এ থাকে। ব্রাউজার ক্লিয়ার করলে ব্যাকআপ রাখো।</p>
+      </section>
     </div>
-    <div style="background:#fdf0e6;border-radius:10px;padding:10px;text-align:center;">
-      <div style="font-size:19px;font-weight:700;color:#993c1d;">🔥${streak}</div>
-      <div style="font-size:10px;color:#993c1d;">চলমান স্ট্রিক</div>
-    </div>
-    <div style="background:#f7f6ef;border-radius:10px;padding:10px;text-align:center;">
-      <div style="font-size:19px;font-weight:700;">${bestStreak}</div>
-      <div style="font-size:10px;color:#6b6b66;">বেস্ট স্ট্রিক</div>
-    </div>
-  `;
+  </dialog>
 
-  // 21-day heatmap
-  const cells = [];
-  for (let i = 20; i >= 0; i--) {
-    const d = new Date();
-    d.setDate(d.getDate() - i);
-    const key = fmt(d);
-    const e = getEntry(key);
-    const total = TEMPLATE[d.getDay()].items.length + e.extra.length;
-    const done = e.checks.filter(Boolean).length + e.extra.filter(x=>x.done).length;
-    const ratio = total ? done/total : 0;
-    let bg = '#eceae0';
-    if (ratio >= 1) bg = '#639922';
-    else if (ratio >= 0.5) bg = '#c0dd97';
-    else if (ratio > 0) bg = '#eaf3de';
-    cells.push(`<div title="${key}: ${done}/${total}" style="width:16px;height:16px;border-radius:4px;background:${bg};"></div>`);
-  }
-  heatmapEl.innerHTML = `
-    <div style="font-size:11px;color:#6b6b66;margin-bottom:6px;">গত ২১ দিন</div>
-    <div style="display:flex;gap:3px;flex-wrap:wrap;">${cells.join('')}</div>
-  `;
-}
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+  <canvas id="confetti" aria-hidden="true"></canvas>
 
-function handleAdd(dateKey) {
-  const input = document.getElementById('input-' + dateKey);
-  addExtra(dateKey, input.value);
-  input.value = '';
-}
-
-document.getElementById('prevWeek').addEventListener('click', () => { weekOffset--; render(); });
-document.getElementById('nextWeek').addEventListener('click', () => { weekOffset++; render(); });
-
-window.toggleCheck = toggleCheck;
-window.toggleExtra = toggleExtra;
-window.removeExtra = removeExtra;
-window.handleAdd = handleAdd;
-
-loadState();
-</script>
+  <script src="assets/app.js?v=3"></script>
+</body>
+</html>
