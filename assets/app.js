@@ -234,10 +234,10 @@
 
   let state = blankState();
   const openDays = new Set([todayKey()]);
-  let currentTab = "today";
-  let saveTimer = 0;
   let weekOffset = 0;
   let editorDay = new Date().getDay();
+  let currentTab = "today";
+  let saveTimer = 0;
 
   /* ------------------------------------------------------------
      DOM refs
@@ -375,6 +375,9 @@
   }
 
   let weekOffset = 0;
+  let editorDay = new Date().getDay();
+  let currentTab = "today";
+  let saveTimer = 0;
 
   function migrateLegacy() {
     let old = null;
@@ -1293,6 +1296,7 @@
 
   function switchTab(name, updateHash) {
     if (!["today", "week", "journey"].includes(name)) name = "today";
+    currentTab = name;
 
     $$(".tab").forEach((btn) => {
       const on = btn.dataset.tab === name;
@@ -1794,6 +1798,7 @@
 
     // Keep class status / countdown fresh without touching inputs.
     setInterval(() => {
+      if (currentTab !== "today") return;
       const active = document.activeElement;
       if (active && el.classList.contains(active)) return;
 
