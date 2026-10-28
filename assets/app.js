@@ -1,5 +1,5 @@
 /* ============================================================
-   My Routine — app logic
+   My Routine - app logic
    Data lives only in this browser (localStorage).
    ============================================================ */
 
@@ -65,7 +65,7 @@
     "আরেক ধাপ এগিয়ে! 🚀",
     "নিজের জন্য সময় দিলে! 💛",
     "ছোট জয়, বড় অর্থ।",
-    "এই তো — চালিয়ে যাও!",
+    "এই তো - চালিয়ে যাও!",
     "গর্বের ব্যাপার! 🌟",
     "একটু একটু করেই হবে।",
   ];
@@ -80,28 +80,28 @@
     "One step at a time is still forward.",
     "আমার ছোট ছোট জয়গুলো গুরুত্বপূর্ণ।",
     "আমি নিজের জন্য সময় বের করি।",
-    "তুমি অনেক দূর এসেছো — থামো না।",
+    "তুমি অনেক দূর এসেছো - থামো না।",
     "Perfect নয়, present হলেই হবে।",
     "আমি নিজের প্রতি দয়ালু থাকি।",
   ];
 
   const QUOTES = [
-    { t: "ছোট ছোট ধাপ, অনেক দূরের যাত্রা।", a: "— My Routine" },
-    { t: "Success is the sum of small efforts repeated day in and day out.", a: "— Robert Collier" },
-    { t: "Perfect নয়, consistent হলেই হবে।", a: "— My Routine" },
-    { t: "We are what we repeatedly do. Excellence, then, is not an act, but a habit.", a: "— Will Durant" },
-    { t: "তুমি আজ যা করছো, কাল সেটাই তোমার ভিত্তি।", a: "— My Routine" },
-    { t: "It does not matter how slowly you go as long as you do not stop.", a: "— Confucius" },
-    { t: "একটা দিন খারাপ গেলে পুরো যাত্রা খারাপ হয় না।", a: "— My Routine" },
-    { t: "You do not rise to the level of your goals. You fall to the level of your systems.", a: "— James Clear" },
-    { t: "Discipline is choosing between what you want now and what you want most.", a: "— Abraham Lincoln" },
-    { t: "ভয় পেলেও এগিয়ে যাওয়া — এটাই সাহস।", a: "— My Routine" },
-    { t: "The secret of getting ahead is getting started.", a: "— Mark Twain" },
-    { t: "Rest is part of the routine, not a break from it.", a: "— My Routine" },
-    { t: "Fall seven times, stand up eight.", a: "— Japanese proverb" },
-    { t: "আজকের 'পারছি না' কালকের 'পেরেছি' হবে।", a: "— My Routine" },
-    { t: "Focus on the next step, not the whole staircase.", a: "— My Routine" },
-    { t: "তুমি যতটা ভাবো, তার চেয়ে বেশি করছো।", a: "— My Routine" },
+    { t: "ছোট ছোট ধাপ, অনেক দূরের যাত্রা।", a: "- My Routine" },
+    { t: "Success is the sum of small efforts repeated day in and day out.", a: "- Robert Collier" },
+    { t: "Perfect নয়, consistent হলেই হবে।", a: "- My Routine" },
+    { t: "We are what we repeatedly do. Excellence, then, is not an act, but a habit.", a: "- Will Durant" },
+    { t: "তুমি আজ যা করছো, কাল সেটাই তোমার ভিত্তি।", a: "- My Routine" },
+    { t: "It does not matter how slowly you go as long as you do not stop.", a: "- Confucius" },
+    { t: "একটা দিন খারাপ গেলে পুরো যাত্রা খারাপ হয় না।", a: "- My Routine" },
+    { t: "You do not rise to the level of your goals. You fall to the level of your systems.", a: "- James Clear" },
+    { t: "Discipline is choosing between what you want now and what you want most.", a: "- Abraham Lincoln" },
+    { t: "ভয় পেলেও এগিয়ে যাওয়া - এটাই সাহস।", a: "- My Routine" },
+    { t: "The secret of getting ahead is getting started.", a: "- Mark Twain" },
+    { t: "Rest is part of the routine, not a break from it.", a: "- My Routine" },
+    { t: "Fall seven times, stand up eight.", a: "- Japanese proverb" },
+    { t: "আজকের 'পারছি না' কালকের 'পেরেছি' হবে।", a: "- My Routine" },
+    { t: "Focus on the next step, not the whole staircase.", a: "- My Routine" },
+    { t: "তুমি যতটা ভাবো, তার চেয়ে বেশি করছো।", a: "- My Routine" },
   ];
 
   const LEVEL_TITLES = ["শুরু", "ছন্দে", "অভ্যাস", "গতি", "শৃঙ্খলা", "ফোকাস", "দুর্দম", "রুটিন মাস্টার", "লিজেন্ড", "মিথিক্যাল"];
@@ -628,7 +628,7 @@
     if (s.level.level > (state.levelSeen || 1)) {
       state.levelSeen = s.level.level;
       save();
-      toast(`লেভেল ${bn(s.level.level)} — ${s.level.title}! 🚀`, "🌟", 4200);
+      toast(`লেভেল ${bn(s.level.level)} - ${s.level.title}! 🚀`, "🌟", 4200);
       celebrate();
     } else if (!state.levelSeen) {
       state.levelSeen = s.level.level;
@@ -641,27 +641,27 @@
 
   const TIERS = {
     empty: [
-      { title: "আজকের পাতা এখনো ফাঁকা", text: "নিচের কাজগুলো তোমার জন্য অপেক্ষা করছে। একটা ছোট কাজ বেছে নাও — শুরু করলেই বাকিটা সহজ লাগবে।" },
+      { title: "আজকের পাতা এখনো ফাঁকা", text: "নিচের কাজগুলো তোমার জন্য অপেক্ষা করছে। একটা ছোট কাজ বেছে নাও - শুরু করলেই বাকিটা সহজ লাগবে।" },
     ],
     zero: [
-      { title: "শুরু করার সময় এখনই 🌱", text: "এখনো কোনো টিক পড়েনি — তাতে কিছু যায় আসে না। একটা কাজ বেছে নাও, মাত্র পাঁচ মিনিট দাও। শুরু করাটাই সবচেয়ে বড় সাহস।" },
-      { title: "তুমি এখানে আছো — এটাই শুরু", text: "সব দিন সমান হয় না। আজ শুধু একটা ছোট কাজ করো। বাকি দিনটা তোমার নিজের জন্য।" },
+      { title: "শুরু করার সময় এখনই 🌱", text: "এখনো কোনো টিক পড়েনি - তাতে কিছু যায় আসে না। একটা কাজ বেছে নাও, মাত্র পাঁচ মিনিট দাও। শুরু করাটাই সবচেয়ে বড় সাহস।" },
+      { title: "তুমি এখানে আছো - এটাই শুরু", text: "সব দিন সমান হয় না। আজ শুধু একটা ছোট কাজ করো। বাকি দিনটা তোমার নিজের জন্য।" },
     ],
     low: [
-      { title: "শুরু করেছো — এটাই বড় কথা ✨", text: "শুরু করাটাই সবচেয়ে কঠিন অংশ ছিল। তুমি সেটা পারেছো। এখন শুধু একটা একটা করে এগোও, তাড়া নেই।" },
-      { title: "প্রথম ধাপটা হয়ে গেছে", text: "লম্বা যাত্রাও এক ধাপ দিয়েই শুরু হয়। আজ যেটুকু পারছো, সেটুকুই যথেষ্ট — তুমি চেষ্টা করছো।" },
+      { title: "শুরু করেছো - এটাই বড় কথা ✨", text: "শুরু করাটাই সবচেয়ে কঠিন অংশ ছিল। তুমি সেটা পারেছো। এখন শুধু একটা একটা করে এগোও, তাড়া নেই।" },
+      { title: "প্রথম ধাপটা হয়ে গেছে", text: "লম্বা যাত্রাও এক ধাপ দিয়েই শুরু হয়। আজ যেটুকু পারছো, সেটুকুই যথেষ্ট - তুমি চেষ্টা করছো।" },
     ],
     mid: [
-      { title: "অর্ধেকের বেশি — ছন্দে আছো ⚡", text: "তুমি এখন গতি ধরেছো। বাকি কাজগুলো একসাথে ভাবার দরকার নেই — শুধু পরের কাজটা করো।" },
+      { title: "অর্ধেকের বেশি - ছন্দে আছো ⚡", text: "তুমি এখন গতি ধরেছো। বাকি কাজগুলো একসাথে ভাবার দরকার নেই - শুধু পরের কাজটা করো।" },
       { title: "দারুণ এগোচ্ছো!", text: "অর্ধেক পথ পেরিয়ে এসেছো। এখন একটু পানি খাও, গভীর শ্বাস নাও, তারপর শেষ অংশটা। আমি জানি পারবে।" },
     ],
     high: [
-      { title: "একদম শেষ ধাপে 🚀", text: "খুব অল্প বাকি! ক্লান্তি আসছে জানি, কিন্তু তুমি এত দূর এসেছো — শেষ টিকটাও দিয়ে দাও। আজকের তুমি কালকের তুমিকে ধন্যবাদ দেবে।" },
-      { title: "প্রায় হয়ে গেছে!", text: "শেষ কয়েকটা কাজ বাকি। এখানেই বেশিরভাগ মানুষ থেমে যায় — তুমি তাদের একজন নও। শেষ করো।" },
+      { title: "একদম শেষ ধাপে 🚀", text: "খুব অল্প বাকি! ক্লান্তি আসছে জানি, কিন্তু তুমি এত দূর এসেছো - শেষ টিকটাও দিয়ে দাও। আজকের তুমি কালকের তুমিকে ধন্যবাদ দেবে।" },
+      { title: "প্রায় হয়ে গেছে!", text: "শেষ কয়েকটা কাজ বাকি। এখানেই বেশিরভাগ মানুষ থেমে যায় - তুমি তাদের একজন নও। শেষ করো।" },
     ],
     full: [
-      { title: "আজ তুমি নিজের হিরো 🌟", text: "সবকিছু শেষ! এটা শুধু একটা টিক নয় — এটা নিজের সাথে করা প্রতিশ্রুতি রাখা। আজকের জন্য নিজেকে একটু প্রশংসা দাও।" },
-      { title: "পুরো দিনটা তোমার ✅", text: "আজকের প্রতিটি কাজ শেষ। তুমি দেখিয়ে দিলে — ইচ্ছা থাকলে সময় বের হয়। আজ শুধু উপভোগ করো, কাল আবার শুরু।" },
+      { title: "আজ তুমি নিজের হিরো 🌟", text: "সবকিছু শেষ! এটা শুধু একটা টিক নয় - এটা নিজের সাথে করা প্রতিশ্রুতি রাখা। আজকের জন্য নিজেকে একটু প্রশংসা দাও।" },
+      { title: "পুরো দিনটা তোমার ✅", text: "আজকের প্রতিটি কাজ শেষ। তুমি দেখিয়ে দিলে - ইচ্ছা থাকলে সময় বের হয়। আজ শুধু উপভোগ করো, কাল আবার শুরু।" },
   ],
   };
 
@@ -691,10 +691,10 @@
 
     if (s.streak >= 2) {
       el.streakLine.hidden = false;
-      el.streakLine.textContent = `🔥 ${bn(s.streak)} দিনের স্ট্রিক — অভ্যাসটা এখন তোমার হয়ে উঠছে।`;
+      el.streakLine.textContent = `🔥 ${bn(s.streak)} দিনের স্ট্রিক - অভ্যাসটা এখন তোমার হয়ে উঠছে।`;
     } else if (s.best >= 2) {
       el.streakLine.hidden = false;
-      el.streakLine.textContent = `🏅 তোমার সেরা স্ট্রিক ${bn(s.best)} দিন — আবার সেখানে ফেরা যায়।`;
+      el.streakLine.textContent = `🏅 তোমার সেরা স্ট্রিক ${bn(s.best)} দিন - আবার সেখানে ফেরা যায়।`;
     } else {
       el.streakLine.hidden = true;
     }
@@ -752,7 +752,7 @@
     const stateLabel = attended ? "উপস্থিত ✓" : status.label;
 
     return `<div class="${cls.join(" ")}" style="--course:${c.color};--course-ink:${c.ink}">
-      <button class="class__toggle" type="button" data-task="class" data-date="${dateKey}" data-id="${entry.course}" aria-pressed="${attended}" title="${esc(c.name)} — উপস্থিতি টিক দাও">
+      <button class="class__toggle" type="button" data-task="class" data-date="${dateKey}" data-id="${entry.course}" aria-pressed="${attended}" title="${esc(c.name)} - উপস্থিতি টিক দাও">
         <span class="class__badge" aria-hidden="true">${c.short}</span>
         <span class="class__info">
           <span class="class__name">${esc(c.name)}</span>
@@ -806,7 +806,7 @@
     }
 
     if (!routine.length && !classes.length && !custom.length) {
-      html += `<div class="empty-note">এই দিনে এখনো কিছু নেই — সেটিংস থেকে রুটিন যোগ করো।</div>`;
+      html += `<div class="empty-note">এই দিনে এখনো কিছু নেই - সেটিংস থেকে রুটিন যোগ করো।</div>`;
     }
 
     if (e && e.win && e.win.trim()) {
@@ -853,11 +853,11 @@
     }
     const st = dayStats(k);
     if (st.total > 0 && st.done === st.total) {
-      el.heroFocus.textContent = "আজকের সব কাজ শেষ — ছোট্ট জয়টা উপভোগ করো ✨";
+      el.heroFocus.textContent = "আজকের সব কাজ শেষ - ছোট্ট জয়টা উপভোগ করো ✨";
       return;
     }
     if (pending) return;
-    el.heroFocus.textContent = "নিজের গতি অনুযায়ী আগাও — যতটুকু পারো, সেটাই যথেষ্ট";
+    el.heroFocus.textContent = "নিজের গতি অনুযায়ী আগাও - যতটুকু পারো, সেটাই যথেষ্ট";
   }
 
   function greetingFor(hour) {
@@ -877,9 +877,9 @@
     if (!t.total) {
       el.heroSub.textContent = "আজকের ছোট ছোট ধাপগুলোই তোমাকে গড়ছে।";
     } else if (pct === 100) {
-      el.heroSub.textContent = "আজকের সব কাজ শেষ — নিজেকে একটু গর্বিত বোধ করতে দাও।";
+      el.heroSub.textContent = "আজকের সব কাজ শেষ - নিজেকে একটু গর্বিত বোধ করতে দাও।";
     } else {
-      el.heroSub.textContent = `আজ ${bn(t.done)}/${bn(t.total)} কাজ শেষ — বাকিটা একটু একটু করেই।`;
+      el.heroSub.textContent = `আজ ${bn(t.done)}/${bn(t.total)} কাজ শেষ - বাকিটা একটু একটু করেই।`;
     }
     renderHeroFocus();
 
@@ -926,7 +926,7 @@
     }
 
     if (!routine.length && !custom.length) {
-      html += `<div class="empty-note">আজকের রুটিন এখনো সাজানো হয়নি — সেটিংস থেকে আইটেম যোগ করো, অথবা নিচে একটা কাজ লেখো।</div>`;
+      html += `<div class="empty-note">আজকের রুটিন এখনো সাজানো হয়নি - সেটিংস থেকে আইটেম যোগ করো, অথবা নিচে একটা কাজ লেখো।</div>`;
     }
 
     el.taskList.innerHTML = html;
@@ -945,7 +945,7 @@
       if (next) {
         extra = `<div style="margin-top:10px;font-size:11.5px;color:var(--muted);">পরের ক্লাস: ${DAY_NAMES[next.date.getDay()]} · ${fmtTime(next.entry.start)} · ${COURSES[next.entry.course].name}</div>`;
       }
-      el.classList.innerHTML = `<div class="class-empty"><span>🌿</span>আজ কোনো ক্লাস নেই — নিজের জন্য একটু সময়।${extra}</div>`;
+      el.classList.innerHTML = `<div class="class-empty"><span>🌿</span>আজ কোনো ক্লাস নেই - নিজের জন্য একটু সময়।${extra}</div>`;
     }
 
     el.nowStrip.innerHTML = renderNowStrip();
@@ -968,7 +968,7 @@
     }
     const next = nextClassFrom(now);
     if (!next) {
-      return `<div class="now-strip"><span class="now-strip__dot now-strip__dot--idle" style="background:var(--muted);box-shadow:0 0 0 4px color-mix(in srgb, var(--muted) 16%, transparent)"></span><span>আজ আর কোনো ক্লাস নেই — নিজের জন্য একটু সময় নাও।</span></div>`;
+      return `<div class="now-strip"><span class="now-strip__dot now-strip__dot--idle" style="background:var(--muted);box-shadow:0 0 0 4px color-mix(in srgb, var(--muted) 16%, transparent)"></span><span>আজ আর কোনো ক্লাস নেই - নিজের জন্য একটু সময় নাও।</span></div>`;
     }
     const c = COURSES[next.entry.course];
     if (next.days === 0) {
@@ -1023,7 +1023,7 @@
         <summary>
           <span class="day__date"><strong>${DAY_NAMES[d.getDay()]}</strong><span>${bn(d.getDate())} ${MONTHS_SHORT[d.getMonth()]}${isToday ? " · আজ" : ""}</span></span>
           <span class="day__bar" aria-hidden="true"><i style="width:${isFuture ? 0 : pct}%"></i></span>
-          <span class="day__pct">${isFuture ? "—" : `${bn(pct)}%`}</span>
+          <span class="day__pct">${isFuture ? "-" : `${bn(pct)}%`}</span>
           <span class="day__chev" aria-hidden="true">›</span>
         </summary>
         <div class="day__body">${dayBody(k)}</div>
@@ -1032,7 +1032,7 @@
 
     const pct = total ? Math.round((done / total) * 100) : 0;
     el.weekSummary.innerHTML = `
-      <div class="mini-stat"><strong>${counted ? `${bn(pct)}%` : "—"}</strong><span>এই সপ্তাহের অগ্রগতি</span></div>
+      <div class="mini-stat"><strong>${counted ? `${bn(pct)}%` : "-"}</strong><span>এই সপ্তাহের অগ্রগতি</span></div>
       <div class="mini-stat"><strong>${bn(perfect)}/${bn(counted || 7)}</strong><span>নিখুঁত দিন</span></div>
       <div class="mini-stat"><strong>${bn(done)}</strong><span>শেষ করা কাজ</span></div>
     `;
@@ -1067,7 +1067,7 @@
       if (s.perfect > shown) html += `<span class="small muted">+${bn(s.perfect - shown)}</span>`;
       el.starJar.innerHTML = html;
     } else {
-      el.starJar.innerHTML = `<div class="empty-note" style="flex:1;">প্রথম নিখুঁত দিনটা আসছে — আজই হতে পারে। 🌱</div>`;
+      el.starJar.innerHTML = `<div class="empty-note" style="flex:1;">প্রথম নিখুঁত দিনটা আসছে - আজই হতে পারে। 🌱</div>`;
     }
 
     el.achievementsList.innerHTML = ACHIEVEMENTS.map((a) => {
@@ -1102,7 +1102,7 @@
         })
         .join("");
     } else {
-      el.winsList.innerHTML = `<div class="empty-note">এখনো কোনো জয় লেখা হয়নি। আজ রাতে একটা ছোট জয় লিখে রাখো — ভবিষ্যতে পড়ে ভালো লাগবে।</div>`;
+      el.winsList.innerHTML = `<div class="empty-note">এখনো কোনো জয় লেখা হয়নি। আজ রাতে একটা ছোট জয় লিখে রাখো - ভবিষ্যতে পড়ে ভালো লাগবে।</div>`;
     }
   }
 
@@ -1129,7 +1129,7 @@
           else if (pct >= 34) lvl = 2;
           else if (pct > 0) lvl = 1;
         }
-        const label = future ? "" : `${bn(d.getDate())} ${MONTHS_SHORT[d.getMonth()]} — ${bn(st.done)}/${bn(st.total)} কাজ`;
+        const label = future ? "" : `${bn(d.getDate())} ${MONTHS_SHORT[d.getMonth()]} - ${bn(st.done)}/${bn(st.total)} কাজ`;
         cells.push(`<span class="hm-cell l${lvl}${future ? " is-future" : ""}" title="${esc(label)}" aria-label="${esc(label)}"></span>`);
       }
       weeks.push(`<div class="heatmap__week">${cells.join("")}</div>`);
@@ -1231,7 +1231,7 @@
         celebrate();
         toast("আজকের সব কাজ শেষ! তুমি দুর্দান্ত 🌟", "🏆", 4400);
       } else if (beforePct < 50 && afterPct >= 50) {
-        toast("অর্ধেকের বেশি শেষ — চালিয়ে যাও! 💪", "⚡", 2400);
+        toast("অর্ধেকের বেশি শেষ - চালিয়ে যাও! 💪", "⚡", 2400);
       } else {
         toast(randomOf(PRAISE), "✨", 1500);
       }
@@ -1365,7 +1365,7 @@
 
     const list = state.routine[editorDay] || [];
     if (!list.length) {
-      el.routineEditor.innerHTML = `<div class="empty-note">এই দিনে কোনো রুটিন নেই — নিচে যোগ করো।</div>`;
+      el.routineEditor.innerHTML = `<div class="empty-note">এই দিনে কোনো রুটিন নেই - নিচে যোগ করো।</div>`;
     } else {
       el.routineEditor.innerHTML = list
         .map(
@@ -1540,12 +1540,12 @@
       renderRoutineEditor();
       toast("ব্যাকআপ লোড হয়েছে ✓", "📥", 2600);
     } catch (err) {
-      toast("ফাইলটা পড়া গেল না — সঠিক ব্যাকআপ ফাইল বেছে নাও", "⚠️", 3400);
+      toast("ফাইলটা পড়া গেল না - সঠিক ব্যাকআপ ফাইল বেছে নাও", "⚠️", 3400);
     }
   }
 
   function resetData() {
-    if (!confirm("সব ডেটা মুছে যাবে — কাজ, স্ট্রিক, জয়ের ডায়েরি সব। তুমি নিশ্চিত?")) return;
+    if (!confirm("সব ডেটা মুছে যাবে - কাজ, স্ট্রিক, জয়ের ডায়েরি সব। তুমি নিশ্চিত?")) return;
     try {
       localStorage.removeItem(STORAGE_KEY);
       localStorage.removeItem(LEGACY_ENTRIES);
@@ -1562,7 +1562,7 @@
     renderAll();
     renderRoutineEditor();
     el.dialog.close();
-    toast("নতুন করে শুরু — চলো, আবার এগোই 🌱", "🌱", 3000);
+    toast("নতুন করে শুরু - চলো, আবার এগোই 🌱", "🌱", 3000);
   }
 
   /* ------------------------------------------------------------
@@ -1620,7 +1620,7 @@
       if (addCustom(el.addTaskInput.value)) {
         el.addTaskInput.value = "";
         renderAll();
-        toast("নতুন কাজ যোগ হলো — তুমি পারবে!", "📝", 2200);
+        toast("নতুন কাজ যোগ হলো - তুমি পারবে!", "📝", 2200);
         el.addTaskInput.focus();
       }
     });
@@ -1814,7 +1814,7 @@
       el.todayDate.textContent = dateLabel(k);
       if (s.streak >= 2) {
         el.streakLine.hidden = false;
-        el.streakLine.textContent = `🔥 ${bn(s.streak)} দিনের স্ট্রিক — অভ্যাসটা এখন তোমার হয়ে উঠছে।`;
+        el.streakLine.textContent = `🔥 ${bn(s.streak)} দিনের স্ট্রিক - অভ্যাসটা এখন তোমার হয়ে উঠছে।`;
       }
       renderHeroFocus();
     }, 45000);
