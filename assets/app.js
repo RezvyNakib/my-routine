@@ -374,7 +374,6 @@
     return s;
   }
 
-  let editorDay = new Date().getDay();
   let saveTimer = 0;
   let weekOffset = 0;
 
