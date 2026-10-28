@@ -234,7 +234,6 @@
 
   let state = blankState();
   const openDays = new Set([todayKey()]);
-  let editorDay = new Date().getDay();
   let currentTab = "today";
   let saveTimer = 0;
   let weekOffset = 0;
