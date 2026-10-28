@@ -376,7 +376,6 @@
 
   let saveTimer = 0;
   let weekOffset = 0;
-  let editorDay = new Date().getDay();
 
   function migrateLegacy() {
     let old = null;
