@@ -237,6 +237,7 @@
   let editorDay = new Date().getDay();
   let currentTab = "today";
   let saveTimer = 0;
+  let weekOffset = 0;
 
   /* ------------------------------------------------------------
      DOM refs
@@ -375,6 +376,7 @@
 
   let editorDay = new Date().getDay();
   let saveTimer = 0;
+  let weekOffset = 0;
 
   function migrateLegacy() {
     let old = null;
