@@ -1145,7 +1145,7 @@
      ------------------------------------------------------------ */
 
   function getEvents(k) {
-    const e = getEntry(k, true);
+    const e = getEntry(k, true) || getEntry(k, true);
     if (!e) return {};
     if (!e.events || typeof e.events !== "object") e.events = {};
     return e.events;
