@@ -1154,7 +1154,7 @@
   function renderEventsPanel() {
     if (!el.eventsList || !el.eventsDate) return;
     const k = el.eventsDate.value || todayKey();
-    const events = getEvents(k);
+    const events = getEvents(k) || {};
     const items = Object.keys(events).map((id) => ({ id, ...events[id] })).sort((a, b) => String(a.text).localeCompare(String(b.text), "bn"));
     if (!items.length) {
       el.eventsList.innerHTML = `<div class="empty-note">এই তারিখে কোনো ইভেন্ট/কুইজ যোগ করা হয়নি।</div>`;
