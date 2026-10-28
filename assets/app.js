@@ -374,7 +374,6 @@
     return s;
   }
 
-  let state = blankState();
   const openDays = new Set([todayKey()]);
   let weekOffset = 0;
   let editorDay = new Date().getDay();
@@ -450,11 +449,11 @@
      Entries + stats
      ------------------------------------------------------------ */
 
-  getEntry(e2) {
-    let entry = state.entries[e2];
+  function getEntry(k, create) {
+    let entry = state.entries[k];
     if (!entry) {
       if (!create) return null;
-      entry = state.entries[e2] = { tasks: {}, classes: {}, custom: [], win: "", events: {} };
+      entry = state.entries[k] = { tasks: {}, classes: {}, custom: [], win: "", events: {} };
     }
     if (!entry.tasks || typeof entry.tasks !== "object") entry.tasks = {};
     if (!entry.classes || typeof entry.classes !== "object") entry.classes = {};
