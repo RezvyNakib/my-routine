@@ -210,13 +210,13 @@
       { id: "phitron", text: "Phitron ২ ঘণ্টা" },
     ];
     return {
-      0: [...base("রাত ১১:৩০"), { id: "rest", text: "নাপ / রেস্ট" }],
-      1: [...base("রাত ১১:৩০"), { id: "rest", text: "নাপ / রেস্ট" }],
-      2: [...base("রাত ১১:৩০"), { id: "rest", text: "নাপ / রেস্ট" }],
-      3: [...base("রাত ১১:৩০"), { id: "rest", text: "নাপ / রেস্ট" }],
-      4: [...base("রাত ১২:০০"), { id: "rest", text: "নাপ / রেস্ট" }],
-      5: [...base("রাত ১২:০০"), { id: "date", text: "গার্লফ্রেন্ডের সাথে সময়" }],
-      6: [...base("রাত ১২:০০"), { id: "rest", text: "নাপ / রেস্ট" }],
+      0: [...base("রাত ১১:৩০")],
+      1: [...base("রাত ১১:৩০")],
+      2: [...base("রাত ১১:৩০")],
+      3: [...base("রাত ১১:৩০")],
+      4: [...base("রাত ১২:০০")],
+      5: [...base("রাত ১২:০০")],
+      6: [...base("রাত ১২:০০")],
     };
   }
 
@@ -249,6 +249,7 @@
   const el = {
     greeting: $("#greeting"),
     heroSub: $("#heroSub"),
+    heroFocus: $("#heroFocus"),
     levelRing: $("#levelRing"),
     levelNum: $("#levelNum"),
     levelName: $("#levelName"),
@@ -297,6 +298,14 @@
     achievementsList: $("#achievementsList"),
     winsList: $("#winsList"),
 
+    eventsCard: $("#eventsCard"),
+    eventsDate: $("#eventsDate"),
+    eventType: $("#eventType"),
+    eventSubject: $("#eventSubject"),
+    eventText: $("#eventText"),
+    eventAddForm: $("#eventAddForm"),
+    eventsList: $("#eventsList"),
+
     dialog: $("#settingsDialog"),
     closeSettings: $("#closeSettings"),
     themeSeg: $("#themeSeg"),
@@ -340,6 +349,16 @@
     s.theme = raw && ["auto", "light", "dark"].includes(raw.theme) ? raw.theme : "auto";
     s.levelSeen = raw && Number.isFinite(raw.levelSeen) ? raw.levelSeen : 1;
 
+    Object.keys(s.entries).forEach((k) => {
+      const e = s.entries[k];
+      if (!e || typeof e !== "object") return;
+      if (!e.tasks || typeof e.tasks !== "object") e.tasks = {};
+      if (!e.classes || typeof e.classes !== "object") e.classes = {};
+      if (!Array.isArray(e.custom)) e.custom = [];
+      if (typeof e.win !== "string") e.win = "";
+      if (!e.events || typeof e.events !== "object") e.events = {};
+    });
+
     const def = defaultRoutine();
     const routine = {};
     for (let i = 0; i < 7; i++) {
@@ -354,6 +373,13 @@
     s.routine = routine;
     return s;
   }
+
+  let state = blankState();
+  const openDays = new Set([todayKey()]);
+  let weekOffset = 0;
+  let editorDay = new Date().getDay();
+  let currentTab = "today";
+  let saveTimer = 0;
 
   function migrateLegacy() {
     let old = null;
@@ -386,7 +412,7 @@
         text: String(x && x.text ? x.text : "").slice(0, 90),
         done: !!(x && x.done),
       }));
-      entries[k] = { tasks, classes: {}, custom, win: "" };
+      entries[k] = { tasks, classes: {}, custom, win: "", events: {} };
     });
 
     state = blankState();
@@ -424,17 +450,18 @@
      Entries + stats
      ------------------------------------------------------------ */
 
-  function getEntry(k, create) {
-    let e = state.entries[k];
-    if (!e) {
+  getEntry(e2) {
+    let entry = state.entries[e2];
+    if (!entry) {
       if (!create) return null;
-      e = state.entries[k] = { tasks: {}, classes: {}, custom: [], win: "" };
+      entry = state.entries[e2] = { tasks: {}, classes: {}, custom: [], win: "", events: {} };
     }
-    if (!e.tasks || typeof e.tasks !== "object") e.tasks = {};
-    if (!e.classes || typeof e.classes !== "object") e.classes = {};
-    if (!Array.isArray(e.custom)) e.custom = [];
-    if (typeof e.win !== "string") e.win = "";
-    return e;
+    if (!entry.tasks || typeof entry.tasks !== "object") entry.tasks = {};
+    if (!entry.classes || typeof entry.classes !== "object") entry.classes = {};
+    if (!Array.isArray(entry.custom)) entry.custom = [];
+    if (typeof entry.win !== "string") entry.win = "";
+    if (!entry.events || typeof entry.events !== "object") entry.events = {};
+    return entry;
   }
 
   const routineFor = (k) => state.routine[parseKey(k).getDay()] || [];
@@ -792,8 +819,48 @@
   }
 
   /* ------------------------------------------------------------
-     Render: hero
+     Smart focus / "what to do now"
      ------------------------------------------------------------ */
+
+  function renderHeroFocus() {
+    if (!el.heroFocus) return;
+    const now = new Date();
+    const mins = now.getHours() * 60 + now.getMinutes();
+    const day = now.getDay();
+    const classes = SCHEDULE[day] || [];
+    const live = classes.find((c) => mins >= minutesOf(c.start) && mins < minutesOf(c.end));
+    if (live) {
+      const c = COURSES[live.course];
+      el.heroFocus.textContent = `এখন ক্লাস: ${c.name} · শেষ ${fmtTime(live.end)} · রুম ${bn(c.room)}`;
+      return;
+    }
+    const next = nextClassFrom(now);
+    if (next && next.days === 0) {
+      const c = COURSES[next.entry.course];
+      el.heroFocus.textContent = `পরবর্তী: ${c.name} · ${fmtTime(next.entry.start)} · ${countdownText(next.minutes)}`;
+      return;
+    }
+    if (next && next.days === 1) {
+      const c = COURSES[next.entry.course];
+      el.heroFocus.textContent = `আগামীকাল: ${c.name} · ${DAY_NAMES[next.date.getDay()]} ${fmtTime(next.entry.start)}`;
+      return;
+    }
+    const k = todayKey();
+    const e = getEntry(k);
+    const routine = routineFor(k);
+    const pending = routine.find((it) => !(e && e.tasks[it.id]));
+    if (pending) {
+      el.heroFocus.textContent = `এখন করার কাজ: ${pending.text}`;
+      return;
+    }
+    const st = dayStats(k);
+    if (st.total > 0 && st.done === st.total) {
+      el.heroFocus.textContent = "আজকের সব কাজ শেষ — ছোট্ট জয়টা উপভোগ করো ✨";
+      return;
+    }
+    if (pending) return;
+    el.heroFocus.textContent = "নিজের গতি অনুযায়ী আগাও — যতটুকু পারো, সেটাই যথেষ্ট";
+  }
 
   function greetingFor(hour) {
     if (hour >= 5 && hour < 12) return "শুভ সকাল";
@@ -816,6 +883,7 @@
     } else {
       el.heroSub.textContent = `আজ ${bn(t.done)}/${bn(t.total)} কাজ শেষ — বাকিটা একটু একটু করেই।`;
     }
+    renderHeroFocus();
 
     el.levelRing.style.setProperty("--p", s.level.pct);
     el.levelNum.textContent = bn(s.level.level);
@@ -1075,8 +1143,33 @@
   }
 
   /* ------------------------------------------------------------
-     Render: all
+     Events calendar / quizzes (per-date notes)
      ------------------------------------------------------------ */
+
+  function getEvents(k) {
+    const e = getEntry(k);
+    if (!e.events || typeof e.events !== "object") e.events = {};
+    return e.events;
+  }
+
+  function renderEventsPanel() {
+    if (!el.eventsList || !el.eventsDate) return;
+    const k = el.eventsDate.value || todayKey();
+    const events = getEvents(k);
+    const items = Object.keys(events).map((id) => ({ id, ...events[id] })).sort((a, b) => String(a.text).localeCompare(String(b.text), "bn"));
+    if (!items.length) {
+      el.eventsList.innerHTML = `<div class="empty-note">এই তারিখে কোনো ইভেন্ট/কুইজ যোগ করা হয়নি।</div>`;
+      return;
+    }
+    el.eventsList.innerHTML = items.map((it) => `<div class="event-item">
+      <div class="event-item__top">
+        <span class="event-item__tag">${it.type === "quiz" ? "কুইজ" : "ইভেন্ট"}</span>
+        <button class="task__del" type="button" data-del-event="${esc(it.id)}" data-event-date="${k}" aria-label="মুছে ফেলো">×</button>
+      </div>
+      <p class="event-item__text">${esc(it.text)}</p>
+      <div class="event-item__meta">${it.subject ? `বিষয়: ${esc(it.subject)}` : ""}</div>
+    </div>`).join("");
+  }
 
   function renderAll() {
     const s = collectStats();
@@ -1085,6 +1178,8 @@
     renderWeek(s);
     renderJourney(s);
     checkLevelUp(s);
+    renderHeroFocus();
+    if (el.eventsDate) renderEventsPanel();
   }
 
   /* ------------------------------------------------------------
@@ -1166,17 +1261,35 @@
     toast("কাজটা মুছে ফেলা হলো", "🗑️", 1800);
   }
 
-  function addCustom(text) {
-    const value = String(text || "").trim();
-    if (!value) return false;
-    const e = getEntry(todayKey(), true);
-    e.custom.push({
-      id: "u" + Date.now().toString(36),
-      text: value.slice(0, 90),
-      done: false,
-    });
+  function addEvent() {
+    if (!el.eventsDate || !el.eventText) return;
+    const k = el.eventsDate.value;
+    if (!k) return;
+    const text = el.eventText.value.trim();
+    if (!text) return;
+    const e = getEntry(k, true);
+    if (!e.events || typeof e.events !== "object") e.events = {};
+    const id = "ev" + Date.now().toString(36);
+    e.events[id] = {
+      type: el.eventType ? el.eventType.value : "quiz",
+      text: text.slice(0, 120),
+      subject: el.eventSubject ? el.eventSubject.value.trim().slice(0, 40) : "",
+      created: Date.now(),
+    };
     save();
-    return true;
+    if (el.eventText) el.eventText.value = "";
+    if (el.eventSubject) el.eventSubject.value = "";
+    renderEventsPanel();
+    toast("ইভেন্ট/কুইজ যোগ করা হয়েছে", "📌", 2000);
+  }
+
+  function removeEvent(dateKey, id) {
+    const e = getEntry(dateKey);
+    if (!e || !e.events || !e.events[id]) return;
+    delete e.events[id];
+    save();
+    renderEventsPanel();
+    toast("মুছে ফেলা হয়েছে", "🗑️", 1600);
   }
 
   /* ------------------------------------------------------------
@@ -1472,6 +1585,18 @@
       switchTab(tabs[next].dataset.tab, true);
     });
 
+    if (el.eventAddForm) {
+      el.eventAddForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        addEvent();
+      });
+    }
+    if (el.eventsDate) {
+      el.eventsDate.value = todayKey();
+      el.eventsDate.addEventListener("change", renderEventsPanel);
+      renderEventsPanel();
+    }
+
     document.addEventListener("click", (e) => {
       const toggle = e.target.closest("[data-task]");
       if (toggle) {
@@ -1480,9 +1605,15 @@
         return;
       }
       const del = e.target.closest("[data-del]");
-      if (del) {
+      if (del && !e.target.closest("[data-del-event]")) {
         e.preventDefault();
         removeCustom(del.dataset.date, del.dataset.del);
+        return;
+      }
+      const delE = e.target.closest("[data-del-event]");
+      if (delE) {
+        e.preventDefault();
+        removeEvent(delE.dataset.eventDate, delE.dataset.delEvent);
       }
     });
 
@@ -1657,6 +1788,10 @@
 
     syncAchievements(true);
     renderAll();
+    if (el.eventsDate) {
+      el.eventsDate.value = todayKey();
+      renderEventsPanel();
+    }
 
     initEvents();
 
@@ -1683,7 +1818,13 @@
         el.streakLine.hidden = false;
         el.streakLine.textContent = `🔥 ${bn(s.streak)} দিনের স্ট্রিক — অভ্যাসটা এখন তোমার হয়ে উঠছে।`;
       }
+      renderHeroFocus();
     }, 45000);
+
+    setInterval(() => {
+      if (document.hidden) return;
+      renderHeroFocus();
+    }, 60000);
   }
 
   boot();

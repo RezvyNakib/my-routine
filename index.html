@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/styles.css?v=3" />
+  <link rel="stylesheet" href="assets/styles.css?v=4" />
 </head>
 <body>
   <div class="shell">
@@ -34,6 +34,7 @@
       <p class="hero__hello" id="greeting">শুভ সকাল, Nakib</p>
       <h1 class="hero__title">তুমি চেষ্টা করছো — <em>এটাই তোমার সবচেয়ে বড় জয়।</em></h1>
       <p class="hero__sub" id="heroSub">আজকের ছোট ছোট ধাপগুলোই তোমাকে গড়ছে।</p>
+      <p class="hero__focus" id="heroFocus" aria-live="polite">এখন যেটা করার সময় — লোড হচ্ছে...</p>
 
       <div class="level">
         <div class="level__ring" id="levelRing" style="--p: 0">
@@ -118,6 +119,28 @@
               </header>
               <div id="nowStrip"></div>
               <div class="class-list" id="classList"></div>
+            </article>
+
+            <article class="card" id="eventsCard">
+              <header class="card__head">
+                <div>
+                  <h2>ইভেন্ট / কুইজ</h2>
+                  <p>তারিখ অনুযায়ী নোট করে রাখো</p>
+                </div>
+              </header>
+              <form class="event-form" id="eventAddForm" autocomplete="off">
+                <div class="event-form__row">
+                  <input id="eventsDate" type="date" />
+                  <select id="eventType">
+                    <option value="quiz">কুইজ</option>
+                    <option value="event">ইভেন্ট</option>
+                  </select>
+                </div>
+                <input id="eventSubject" type="text" maxlength="40" placeholder="বিষয় (ঐচ্ছিক)" />
+                <input id="eventText" type="text" maxlength="120" placeholder="যেমন: Exam on Ch. 4 / Quiz on DBMS" required />
+                <button type="submit">যোগ করো</button>
+              </form>
+              <div class="events-list" id="eventsList"></div>
             </article>
 
             <article class="card quote-card">
@@ -212,8 +235,8 @@
     </main>
 
     <footer class="footer">
-      <p><strong>My Routine</strong> — তৈরি হয়েছে একজনের জন্য, যিনি প্রতিদিন চেষ্টা করে যাচ্ছেন। <span class="heart">♥</span></p>
-      <p>সব ডেটা শুধু তোমার ব্রাউজারে থাকে · <span id="footerYear"></span></p>
+      <p><strong>My Routine</strong> — Made for Nakib who tries every day. <span class="heart">♥</span></p>
+      <p>All data stays only in Nakib browser · <span id="footerYear"></span></p>
     </footer>
   </div>
 
@@ -259,6 +282,6 @@
   <div class="toasts" id="toasts" aria-live="polite"></div>
   <canvas id="confetti" aria-hidden="true"></canvas>
 
-  <script src="assets/app.js?v=3"></script>
+  <script src="assets/app.js?v=4"></script>
 </body>
 </html>
