@@ -374,7 +374,6 @@
     return s;
   }
 
-  let editorDay = new Date().getDay();
   let currentTab = "today";
   let saveTimer = 0;
 
