@@ -374,6 +374,10 @@
     return s;
   }
 
+  let weekOffset = 0;
+  let editorDay = new Date().getDay();
+  let currentTab = "today";
+  let saveTimer = 0;
 
   function migrateLegacy() {
     let old = null;
